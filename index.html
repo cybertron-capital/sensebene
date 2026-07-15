@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SenseBene Wellness | San Pedro Sula</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --green:   #2d5a3d;
+      --green2:  #1e3d2a;
+      --sage:    #7a9e87;
+      --mint:    #a8c5b0;
+      --cream:   #f7f4ef;
+      --cream2:  #ede8df;
+      --dark:    #0f1a13;
+      --dark2:   #162019;
+      --dark3:   #1e2e22;
+      --muted:   #7a8a7e;
+      --wa:      #25d366;
+      --gold:    #c9a96e;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(--cream); overflow-x: hidden; }
+
+    /* CURSOR */
+    .cursor { width: 10px; height: 10px; background: var(--mint); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width .3s, height .3s; mix-blend-mode: difference; }
+    .cursor-ring { width: 36px; height: 36px; border: 1px solid rgba(168,197,176,.4); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: left .12s ease, top .12s ease; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 500; display: flex; align-items: center; justify-content: space-between; padding: 0 60px; height: 80px; transition: background .4s; }
+    nav.scrolled { background: rgba(15,26,19,.93); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(122,158,135,.15); }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; letter-spacing: 3px; color: var(--mint); text-transform: uppercase; }
+    .logo em { font-style: italic; font-weight: 400; color: var(--sage); }
+    .nav-links { display: flex; gap: 36px; }
+    .nav-links a { font-size: .72rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(247,244,239,.5); text-decoration: none; transition: color .2s; }
+    .nav-links a:hover { color: var(--mint); }
+    .nav-btn { display: flex; align-items: center; gap: 8px; font-size: .72rem; letter-spacing: 2px; text-transform: uppercase; color: var(--dark); background: var(--mint); padding: 10px 22px; text-decoration: none; font-weight: 500; transition: background .2s; }
+    .nav-btn:hover { background: var(--sage); }
+    .nav-btn svg { width: 14px; height: 14px; fill: var(--dark); }
+    @media(max-width:768px){ nav { padding: 0 24px; } .nav-links { display: none; } }
+
+    /* HERO */
+    .hero { height: 100vh; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(45,90,61,.35) 0%, transparent 65%), radial-gradient(ellipse 40% 40% at 15% 80%, rgba(122,158,135,.15) 0%, transparent 50%), var(--dark); animation: bgPulse 8s ease-in-out infinite; }
+    @keyframes bgPulse { 0%,100%{opacity:1} 50%{opacity:.75} }
+    .orb { position: absolute; border-radius: 50%; filter: blur(90px); animation: orbFloat 14s ease-in-out infinite; pointer-events: none; }
+    .o1 { width: 550px; height: 550px; background: rgba(45,90,61,.2); top: -160px; right: -120px; }
+    .o2 { width: 380px; height: 380px; background: rgba(122,158,135,.12); bottom: -100px; left: -80px; animation-delay: -7s; }
+    .o3 { width: 220px; height: 220px; background: rgba(168,197,176,.1); top: 35%; left: 8%; animation-delay: -3s; }
+    @keyframes orbFloat { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(25px,-18px) scale(1.04)} 66%{transform:translate(-18px,25px) scale(.96)} }
+    .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(122,158,135,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(122,158,135,.05) 1px, transparent 1px); background-size: 70px 70px; }
+    .hero-content { position: relative; z-index: 1; padding: 0 24px; }
+    .hero-tag { display: inline-flex; align-items: center; gap: 14px; font-size: .65rem; letter-spacing: 5px; text-transform: uppercase; color: var(--mint); margin-bottom: 28px; opacity: 0; animation: fadeUp .8s .2s forwards; }
+    .hero-tag::before,.hero-tag::after { content:''; width: 40px; height: 1px; background: linear-gradient(90deg, transparent, var(--mint), transparent); }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(3.2rem,9vw,7.5rem); font-weight: 700; line-height: .95; color: var(--cream); opacity: 0; animation: fadeUp .8s .4s forwards; }
+    .hero h1 em { color: var(--mint); font-style: italic; display: block; }
+    .hero-desc { font-size: clamp(.85rem,2vw,1rem); font-weight: 300; color: var(--muted); max-width: 460px; margin: 28px auto 48px; line-height: 1.9; opacity: 0; animation: fadeUp .8s .6s forwards; }
+    .hero-ctas { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; opacity: 0; animation: fadeUp .8s .8s forwards; }
+    .btn-main { display: inline-flex; align-items: center; gap: 10px; background: var(--green); color: var(--cream); font-size: .78rem; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; padding: 16px 36px; text-decoration: none; transition: background .25s, transform .25s, box-shadow .25s; border: 1px solid rgba(122,158,135,.3); }
+    .btn-main:hover { background: var(--green2); transform: translateY(-2px); box-shadow: 0 16px 40px rgba(45,90,61,.4); }
+    .btn-main svg { width: 18px; height: 18px; fill: var(--cream); }
+    .btn-out { display: inline-flex; align-items: center; gap: 10px; border: 1px solid rgba(168,197,176,.35); color: var(--mint); font-size: .78rem; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; padding: 16px 36px; text-decoration: none; transition: background .25s, border-color .25s; }
+    .btn-out:hover { border-color: var(--mint); background: rgba(168,197,176,.08); }
+    .hero-stats { position: absolute; bottom: 0; left: 0; right: 0; display: flex; justify-content: center; border-top: 1px solid rgba(122,158,135,.15); opacity: 0; animation: fadeUp .8s 1s forwards; }
+    .hstat { flex: 1; max-width: 200px; padding: 26px 20px; text-align: center; border-right: 1px solid rgba(122,158,135,.15); }
+    .hstat:last-child { border-right: none; }
+    .hstat-num { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--mint); line-height: 1; }
+    .hstat-label { font-size: .62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+
+    /* MARQUEE */
+    .marquee-wrap { background: var(--green); overflow: hidden; padding: 14px 0; white-space: nowrap; }
+    .marquee { display: inline-flex; animation: marquee 22s linear infinite; }
+    .mitem { font-size: .68rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(247,244,239,.85); font-weight: 500; padding: 0 36px; }
+    .mdot { color: rgba(247,244,239,.35); }
+    @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* SECTIONS */
+    .container { max-width: 1100px; margin: 0 auto; }
+    .s-tag { font-size: .63rem; letter-spacing: 4px; text-transform: uppercase; color: var(--mint); margin-bottom: 14px; }
+    .s-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem,5vw,3.5rem); font-weight: 700; line-height: 1.15; }
+    .s-title em { color: var(--mint); font-style: italic; }
+    .s-sub { font-size: .9rem; color: var(--muted); max-width: 500px; line-height: 1.85; font-weight: 300; margin-top: 14px; }
+
+    /* ABOUT */
+    .about-section { padding: 130px 60px; background: var(--dark); }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 90px; align-items: center; }
+    @media(max-width:900px){ .about-grid { grid-template-columns:1fr; gap:50px; } .about-section { padding: 80px 24px; } }
+    .about-visual { position: relative; }
+    .about-card { background: var(--dark3); border: 1px solid rgba(122,158,135,.2); padding: 60px 44px; text-align: center; }
+    .about-big { font-family: 'Playfair Display', serif; font-size: 5.5rem; color: var(--mint); line-height: 1; font-weight: 700; }
+    .about-lbl { font-size: .63rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+    .about-divider { height: 1px; background: rgba(122,158,135,.2); margin: 26px 0; }
+    .about-quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: .92rem; color: rgba(247,244,239,.7); line-height: 1.8; }
+    .about-badge { position: absolute; right: -24px; top: -24px; background: var(--green); color: var(--cream); padding: 20px 22px; text-align: center; border: 1px solid rgba(168,197,176,.2); }
+    .about-badge strong { display: block; font-size: 1.8rem; font-weight: 700; line-height: 1; }
+    .about-badge span { font-size: .58rem; letter-spacing: 2px; text-transform: uppercase; }
+    .features { list-style: none; display: flex; flex-direction: column; gap: 16px; margin-top: 36px; }
+    .feat { display: flex; align-items: center; gap: 16px; padding: 16px 20px; border-left: 2px solid var(--sage); background: rgba(45,90,61,.12); }
+    .feat-icon { font-size: 1.2rem; }
+    .feat h4 { font-size: .85rem; font-weight: 500; margin-bottom: 3px; }
+    .feat p { font-size: .78rem; color: var(--muted); font-weight: 300; }
+
+    /* SERVICES */
+    .services-section { padding: 120px 24px; background: var(--dark2); }
+    .svc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; max-width: 1100px; margin: 64px auto 0; }
+    @media(max-width:900px){ .svc-grid { grid-template-columns: 1fr 1fr; } }
+    @media(max-width:600px){ .svc-grid { grid-template-columns: 1fr; } }
+    .scard { background: var(--dark3); padding: 50px 34px; position: relative; overflow: hidden; transition: background .3s, transform .3s; cursor: default; }
+    .scard::before { content:''; position: absolute; bottom: 0; left: 0; height: 2px; width: 0; background: linear-gradient(90deg, var(--green), var(--mint)); transition: width .4s ease; }
+    .scard:hover { background: #1e2e24; transform: translateY(-4px); }
+    .scard:hover::before { width: 100%; }
+    .scard-num { font-family: 'Playfair Display', serif; font-size: 4rem; color: rgba(122,158,135,.12); line-height: 1; font-weight: 700; margin-bottom: 14px; }
+    .scard-emoji { font-size: 1.8rem; margin-bottom: 14px; display: block; }
+    .scard h3 { font-size: 1rem; font-weight: 500; margin-bottom: 10px; }
+    .scard p { font-size: .83rem; color: var(--muted); line-height: 1.85; font-weight: 300; }
+    .scard-tag { display: inline-block; margin-top: 18px; font-size: .6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--mint); border-bottom: 1px solid rgba(122,158,135,.3); padding-bottom: 2px; }
+
+    /* GALLERY */
+    .gallery { overflow: hidden; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(4,1fr); grid-template-rows: 260px 260px; }
+    @media(max-width:768px){ .gallery-grid { grid-template-columns: repeat(2,1fr); grid-template-rows: repeat(4,180px); } }
+    .gitem { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .gitem:nth-child(1){ grid-column: span 2; }
+    .gitem:nth-child(4){ grid-column: span 2; }
+    .gbg { position: absolute; inset: 0; transition: transform .6s ease; }
+    .gitem:hover .gbg { transform: scale(1.08); }
+    .g1 .gbg { background: radial-gradient(ellipse at 35% 50%, rgba(45,90,61,.5), rgba(15,26,19,.96)); }
+    .g2 .gbg { background: radial-gradient(ellipse at 65% 30%, rgba(122,158,135,.3), rgba(15,26,19,.96)); }
+    .g3 .gbg { background: radial-gradient(ellipse at 50% 70%, rgba(45,90,61,.4), rgba(15,26,19,.96)); }
+    .g4 .gbg { background: radial-gradient(ellipse at 40% 40%, rgba(168,197,176,.25), rgba(15,26,19,.96)); }
+    .g5 .gbg { background: radial-gradient(ellipse at 60% 60%, rgba(45,90,61,.35), rgba(15,26,19,.96)); }
+    .glabel { position: relative; z-index: 1; text-align: center; opacity: 0; transform: translateY(8px); transition: opacity .4s, transform .4s; }
+    .gitem:hover .glabel { opacity: 1; transform: translateY(0); }
+    .glabel span { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.4rem; color: var(--mint); }
+    .glabel p { font-size: .62rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+    .gitem::after { content:''; position: absolute; bottom: 14px; right: 14px; width: 28px; height: 28px; border-right: 1px solid rgba(122,158,135,.25); border-bottom: 1px solid rgba(122,158,135,.25); transition: width .3s, height .3s, border-color .3s; }
+    .gitem:hover::after { width: 48px; height: 48px; border-color: var(--mint); }
+
+    /* PRICING */
+    .pricing-section { padding: 130px 24px; background: var(--dark); }
+    .pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; max-width: 1000px; margin: 64px auto 0; }
+    @media(max-width:768px){ .pricing-grid { grid-template-columns: 1fr; } }
+    .pcard { background: var(--dark3); padding: 50px 34px; text-align: center; position: relative; transition: transform .3s; }
+    .pcard:hover { transform: translateY(-6px); }
+    .pcard.feat { background: linear-gradient(160deg, #1a2e20, #1e3424); border: 1px solid rgba(122,158,135,.35); }
+    .pcard.feat::before { content: 'MÁS POPULAR'; position: absolute; top: 0; left: 50%; transform: translateX(-50%); background: var(--green); color: var(--cream); font-size: .52rem; letter-spacing: 3px; font-weight: 500; padding: 6px 18px; }
+    .pcard-name { font-size: .62rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
+    .pcard-price { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--mint); line-height: 1; font-weight: 700; }
+    .pcard-price sup { font-size: 1.3rem; vertical-align: super; }
+    .pcard-price span { font-size: .78rem; color: var(--muted); font-family: 'DM Sans',sans-serif; }
+    .pcard-div { height: 1px; background: rgba(122,158,135,.15); margin: 26px 0; }
+    .pcard-feats { list-style: none; display: flex; flex-direction: column; gap: 11px; margin-bottom: 34px; text-align: left; }
+    .pcard-feats li { display: flex; align-items: center; gap: 10px; font-size: .82rem; color: rgba(247,244,239,.75); font-weight: 300; }
+    .pcard-feats li::before { content:'✦'; color: var(--mint); font-size: .58rem; flex-shrink: 0; }
+    .pcard-btn { display: block; font-size: .7rem; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; padding: 13px 26px; font-weight: 500; transition: background .25s, color .25s, border-color .25s; }
+    .pcard-btn.out { border: 1px solid rgba(122,158,135,.3); color: var(--mint); }
+    .pcard-btn.out:hover { border-color: var(--mint); background: rgba(122,158,135,.08); }
+    .pcard-btn.solid { background: var(--green); color: var(--cream); border: 1px solid rgba(122,158,135,.2); }
+    .pcard-btn.solid:hover { background: var(--green2); }
+
+    /* TESTIMONIALS */
+    .testi-section { padding: 130px 24px; background: var(--dark2); }
+    .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; max-width: 1100px; margin: 64px auto 0; }
+    @media(max-width:768px){ .testi-grid { grid-template-columns: 1fr; } }
+    .tcard { background: var(--dark3); padding: 46px 34px; transition: background .3s; }
+    .tcard:hover { background: #1e2e24; }
+    .tcard-stars { color: var(--gold); font-size: .82rem; letter-spacing: 3px; margin-bottom: 18px; }
+    .tcard-quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: .93rem; color: rgba(247,244,239,.8); line-height: 1.85; margin-bottom: 26px; }
+    .tcard-author { display: flex; align-items: center; gap: 12px; }
+    .tcard-av { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--green), var(--sage)); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display',serif; font-size: .85rem; color: var(--cream); font-weight: 700; }
+    .tcard-name { font-size: .82rem; font-weight: 500; }
+    .tcard-svc { font-size: .68rem; color: var(--muted); letter-spacing: 1px; margin-top: 2px; }
+
+    /* SOCIAL */
+    .social-section { padding: 90px 24px; background: var(--dark); border-top: 1px solid rgba(122,158,135,.1); }
+    .sicons { display: flex; justify-content: center; gap: 14px; margin-top: 44px; }
+    .sicon { width: 58px; height: 58px; border: 1px solid rgba(122,158,135,.22); display: flex; align-items: center; justify-content: center; transition: background .25s, border-color .25s, transform .25s; cursor: pointer; }
+    .sicon:hover { background: rgba(122,158,135,.1); border-color: var(--mint); transform: translateY(-4px); }
+    .sicon svg { width: 22px; height: 22px; fill: var(--mint); }
+
+    /* FINAL CTA */
+    .final { padding: 150px 24px; text-align: center; background: radial-gradient(ellipse 70% 55% at 50% 50%, rgba(45,90,61,.25) 0%, transparent 65%), var(--dark2); position: relative; overflow: hidden; border-top: 1px solid rgba(122,158,135,.1); }
+    .final::before { content:'SENSE'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: 'Playfair Display',serif; font-size: clamp(7rem,18vw,16rem); font-weight: 700; color: rgba(122,158,135,.04); white-space: nowrap; pointer-events: none; user-select: none; letter-spacing: 16px; }
+    .final h2 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem,7vw,5.5rem); font-weight: 700; line-height: 1.08; position: relative; margin-bottom: 18px; }
+    .final h2 em { color: var(--mint); font-style: italic; display: block; }
+    .final p { font-size: .93rem; color: var(--muted); max-width: 400px; margin: 0 auto 48px; line-height: 1.9; font-weight: 300; position: relative; }
+    .final-btn { display: inline-flex; align-items: center; gap: 12px; background: var(--wa); color: #fff; font-size: .8rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; padding: 20px 46px; text-decoration: none; position: relative; animation: wapulse 3s ease-in-out infinite; transition: opacity .2s, transform .2s; }
+    .final-btn:hover { opacity: .9; transform: translateY(-3px); }
+    .final-btn svg { width: 22px; height: 22px; fill: #fff; }
+    @keyframes wapulse { 0%,100%{box-shadow:0 0 0 0 rgba(37,211,102,.35)} 50%{box-shadow:0 0 0 14px rgba(37,211,102,0)} }
+
+    /* FOOTER */
+    footer { background: #080f0a; border-top: 1px solid rgba(122,158,135,.1); padding: 44px 60px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 18px; }
+    @media(max-width:600px){ footer { padding: 32px 24px; flex-direction: column; text-align: center; } }
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--mint); letter-spacing: 3px; text-transform: uppercase; }
+    footer p { font-size: .7rem; color: rgba(122,138,126,.45); letter-spacing: 1px; }
+
+    /* FLOATING WA */
+    .wa-float { position: fixed; bottom: 30px; right: 30px; width: 58px; height: 58px; border-radius: 50%; background: var(--wa); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(37,211,102,.45); z-index: 999; text-decoration: none; animation: wapulse 3s ease-in-out infinite; }
+    .wa-float:hover { transform: scale(1.08); }
+    .wa-float svg { width: 30px; height: 30px; fill: #fff; }
+
+    /* FADE */
+    .fade { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s ease; }
+    .fade-l { opacity: 0; transform: translateX(-26px); transition: opacity .7s ease, transform .7s ease; }
+    .fade-r { opacity: 0; transform: translateX(26px); transition: opacity .7s ease, transform .7s ease; }
+    .fade.visible, .fade-l.visible, .fade-r.visible { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- WA FLOAT -->
+<a class="wa-float" href="https://wa.me/50496380089?text=Hola%2C%20quiero%20reservar%20una%20cita%20en%20SenseBene" target="_blank">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.562 4.14 1.535 5.876L.057 23.882a.5.5 0 0 0 .604.63l6.211-1.63A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.857a9.832 9.832 0 0 1-5.032-1.376l-.36-.214-3.732.979.998-3.642-.236-.374A9.808 9.808 0 0 1 2.143 12C2.143 6.544 6.544 2.143 12 2.143S21.857 6.544 21.857 12 17.456 21.857 12 21.857z"/></svg>
+</a>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="logo">Sense<em>Bene</em></div>
+  <div class="nav-links">
+    <a href="#servicios">Servicios</a>
+    <a href="#experiencia">Nosotros</a>
+    <a href="#precios">Precios</a>
+  </div>
+  <a class="nav-btn" href="https://wa.me/50496380089?text=Hola%2C%20quiero%20reservar" target="_blank">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.562 4.14 1.535 5.876L.057 23.882a.5.5 0 0 0 .604.63l6.211-1.63A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.857a9.832 9.832 0 0 1-5.032-1.376l-.36-.214-3.732.979.998-3.642-.236-.374A9.808 9.808 0 0 1 2.143 12C2.143 6.544 6.544 2.143 12 2.143S21.857 6.544 21.857 12 17.456 21.857 12 21.857z"/></svg>
+    Reservar
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-tag">San Pedro Sula · Honduras</div>
+    <h1>Donde el<br/><em>bienestar</em><br/>florece</h1>
+    <p class="hero-desc">SenseBene es tu espacio de renovación. Tratamientos especializados, ambiente natural y el cuidado que mereces.</p>
+    <div class="hero-ctas">
+      <a class="btn-main" href="https://wa.me/50496380089?text=Hola%2C%20quiero%20reservar%20una%20cita%20en%20SenseBene" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.562 4.14 1.535 5.876L.057 23.882a.5.5 0 0 0 .604.63l6.211-1.63A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.857a9.832 9.832 0 0 1-5.032-1.376l-.36-.214-3.732.979.998-3.642-.236-.374A9.808 9.808 0 0 1 2.143 12C2.143 6.544 6.544 2.143 12 2.143S21.857 6.544 21.857 12 17.456 21.857 12 21.857z"/></svg>
+        Reservar cita
+      </a>
+      <a class="btn-out" href="#servicios">Ver servicios</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hstat"><div class="hstat-num">4.9★</div><div class="hstat-label">Google Reviews</div></div>
+    <div class="hstat"><div class="hstat-num">+79</div><div class="hstat-label">Reseñas verificadas</div></div>
+    <div class="hstat"><div class="hstat-num">2</div><div class="hstat-label">Sucursales en SPS</div></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee">
+    <span class="mitem">Masajes Terapéuticos <span class="mdot">✦</span></span>
+    <span class="mitem">Tratamientos Faciales <span class="mdot">✦</span></span>
+    <span class="mitem">Aromaterapia <span class="mdot">✦</span></span>
+    <span class="mitem">Reflexología <span class="mdot">✦</span></span>
+    <span class="mitem">Wellness Integral <span class="mdot">✦</span></span>
+    <span class="mitem">Paquetes para Parejas <span class="mdot">✦</span></span>
+    <span class="mitem">Masajes Terapéuticos <span class="mdot">✦</span></span>
+    <span class="mitem">Tratamientos Faciales <span class="mdot">✦</span></span>
+    <span class="mitem">Aromaterapia <span class="mdot">✦</span></span>
+    <span class="mitem">Reflexología <span class="mdot">✦</span></span>
+    <span class="mitem">Wellness Integral <span class="mdot">✦</span></span>
+    <span class="mitem">Paquetes para Parejas <span class="mdot">✦</span></span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about-section" id="experiencia">
+  <div class="about-grid container">
+    <div class="about-visual fade-l">
+      <div class="about-card">
+        <div class="about-big">4.9</div>
+        <div class="about-lbl">Estrellas en Google</div>
+        <div class="about-divider"></div>
+        <div class="about-quote">"SenseBene cambió mi manera de ver el bienestar. Cada visita es una experiencia completamente distinta y siempre salgo renovada."</div>
+        <p style="font-size:.62rem; letter-spacing:2px; color:var(--mint); margin-top:14px; text-transform:uppercase">— Clienta verificada</p>
+      </div>
+      <div class="about-badge"><strong>+79</strong><span>Reseñas</span></div>
+    </div>
+    <div class="fade-r">
+      <p class="s-tag">Nuestra esencia</p>
+      <h2 class="s-title">Tu santuario de <em>bienestar</em> en San Pedro Sula</h2>
+      <p class="s-sub" style="margin-top:16px">En SenseBene fusionamos técnicas ancestrales con métodos modernos para crear experiencias de wellness únicas. Somos más que un spa — somos tu espacio de transformación.</p>
+      <ul class="features" style="margin-top:32px">
+        <li class="feat"><div class="feat-icon">🌿</div><div><h4>100% productos naturales</h4><p>Ingredientes seleccionados que respetan tu piel y el medio ambiente</p></div></li>
+        <li class="feat"><div class="feat-icon">🤲</div><div><h4>Terapeutas certificadas</h4><p>Formación continua en las mejores técnicas internacionales de wellness</p></div></li>
+        <li class="feat"><div class="feat-icon">🏡</div><div><h4>2 sucursales en SPS</h4><p>Col. Los Alpes y Col. Jardines del Valle — elige la más cercana a ti</p></div></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services-section" id="servicios">
+  <div class="container" style="text-align:center">
+    <p class="s-tag fade">Nuestros rituales</p>
+    <h2 class="s-title fade">Tratamientos para <em>cada</em> necesidad</h2>
+    <p class="s-sub fade" style="margin:14px auto 0">Desde un masaje express hasta un día completo de wellness — diseñamos la experiencia perfecta para ti.</p>
+  </div>
+  <div class="svc-grid">
+    <div class="scard fade"><div class="scard-num">01</div><span class="scard-emoji">🤲</span><h3>Masaje Terapéutico</h3><p>Libera tensiones con técnicas suecas, deportivas o de tejido profundo. Personalizamos la presión y las áreas de enfoque.</p><div class="scard-tag">60 – 90 min</div></div>
+    <div class="scard fade"><div class="scard-num">02</div><span class="scard-emoji">✨</span><h3>Facial Revitalizante</h3><p>Limpieza profunda, exfoliación enzimática y mascarillas hidratantes para una piel luminosa y firme desde la primera sesión.</p><div class="scard-tag">75 min</div></div>
+    <div class="scard fade"><div class="scard-num">03</div><span class="scard-emoji">🌿</span><h3>Aromaterapia</h3><p>Aceites esenciales puros que equilibran mente y cuerpo. Reduce el estrés y activa tu energía natural.</p><div class="scard-tag">60 min</div></div>
+    <div class="scard fade"><div class="scard-num">04</div><span class="scard-emoji">👣</span><h3>Reflexología Podal</h3><p>Estimulación de puntos reflejos en los pies que favorece la salud de órganos y sistemas de todo el cuerpo.</p><div class="scard-tag">45 min</div></div>
+    <div class="scard fade"><div class="scard-num">05</div><span class="scard-emoji">🧖</span><h3>Exfoliación Corporal</h3><p>Scrubs naturales que renuevan tu piel, eliminan células muertas y dejan una textura suave y radiante.</p><div class="scard-tag">50 min</div></div>
+    <div class="scard fade"><div class="scard-num">06</div><span class="scard-emoji">💑</span><h3>Wellness para Parejas</h3><p>Sala privada, masajes simultáneos y ritual completo de bienestar compartido. El regalo perfecto para momentos especiales.</p><div class="scard-tag">90 – 120 min</div></div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery">
+  <div class="gallery-grid">
+    <div class="gitem g1"><div class="gbg"></div><div class="glabel"><span>Relajación</span><p>Masajes terapéuticos</p></div></div>
+    <div class="gitem g2"><div class="gbg"></div><div class="glabel"><span>Armonía</span><p>Aromaterapia</p></div></div>
+    <div class="gitem g3"><div class="gbg"></div><div class="glabel"><span>Renovación</span><p>Tratamientos faciales</p></div></div>
+    <div class="gitem g4"><div class="gbg"></div><div class="glabel"><span>Bienestar</span><p>Wellness integral</p></div></div>
+    <div class="gitem g5"><div class="gbg"></div><div class="glabel"><span>Conexión</span><p>Paquetes para parejas</p></div></div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="precios">
+  <div class="container" style="text-align:center">
+    <p class="s-tag fade">Paquetes</p>
+    <h2 class="s-title fade">Elige tu <em>experiencia</em></h2>
+    <p class="s-sub fade" style="margin:14px auto 0">Transparencia total — sin costos ocultos ni sorpresas.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="pcard fade">
+      <div class="pcard-name">Esencial</div>
+      <div class="pcard-price"><sup>L</sup>550<span>/sesión</span></div>
+      <div class="pcard-div"></div>
+      <ul class="pcard-feats">
+        <li>1 tratamiento a elegir</li>
+        <li>60 minutos de sesión</li>
+        <li>Té de bienvenida</li>
+        <li>Uso de instalaciones</li>
+      </ul>
+      <a class="pcard-btn out" href="https://wa.me/50496380089?text=Hola%2C%20quiero%20el%20paquete%20Esencial" target="_blank">Reservar</a>
+    </div>
+    <div class="pcard feat fade">
+      <div class="pcard-name">Wellness</div>
+      <div class="pcard-price"><sup>L</sup>1,100<span>/sesión</span></div>
+      <div class="pcard-div"></div>
+      <ul class="pcard-feats">
+        <li>2 tratamientos a elegir</li>
+        <li>90 minutos de sesión</li>
+        <li>Aromaterapia incluida</li>
+        <li>Té + snack saludable</li>
+        <li>10% desc. próxima visita</li>
+      </ul>
+      <a class="pcard-btn solid" href="https://wa.me/50496380089?text=Hola%2C%20quiero%20el%20paquete%20Wellness" target="_blank">Reservar</a>
+    </div>
+    <div class="pcard fade">
+      <div class="pcard-name">Parejas</div>
+      <div class="pcard-price"><sup>L</sup>1,900<span>/pareja</span></div>
+      <div class="pcard-div"></div>
+      <ul class="pcard-feats">
+        <li>Sala privada para dos</li>
+        <li>Masajes simultáneos</li>
+        <li>Facial express incluido</li>
+        <li>120 minutos</li>
+        <li>Ritual aromático</li>
+      </ul>
+      <a class="pcard-btn out" href="https://wa.me/50496380089?text=Hola%2C%20quiero%20el%20paquete%20para%20Parejas" target="_blank">Reservar</a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi-section">
+  <div class="container" style="text-align:center">
+    <p class="s-tag fade">Testimonios</p>
+    <h2 class="s-title fade">Lo que dicen<br/><em>nuestras clientas</em></h2>
+  </div>
+  <div class="testi-grid">
+    <div class="tcard fade">
+      <div class="tcard-stars">★★★★★</div>
+      <div class="tcard-quote">"El masaje terapéutico fue exactamente lo que necesitaba. Salí sin el dolor de espalda que tenía hace meses. El ambiente es increíble."</div>
+      <div class="tcard-author"><div class="tcard-av">SL</div><div><div class="tcard-name">Sofía L.</div><div class="tcard-svc">Masaje Terapéutico</div></div></div>
+    </div>
+    <div class="tcard fade">
+      <div class="tcard-stars">★★★★★</div>
+      <div class="tcard-quote">"Vine con mi esposo al paquete de parejas y fue una experiencia hermosa. Super recomendado para fechas especiales. El personal es muy profesional."</div>
+      <div class="tcard-author"><div class="tcard-av">KM</div><div><div class="tcard-name">Karen M.</div><div class="tcard-svc">Paquete para Parejas</div></div></div>
+    </div>
+    <div class="tcard fade">
+      <div class="tcard-stars">★★★★★</div>
+      <div class="tcard-quote">"El facial revitalizante transformó mi piel completamente. Tengo 45 años y quedé como de 30. Ya es mi lugar favorito en San Pedro Sula."</div>
+      <div class="tcard-author"><div class="tcard-av">MR</div><div><div class="tcard-name">María R.</div><div class="tcard-svc">Facial Revitalizante</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL -->
+<section class="social-section">
+  <div class="container" style="text-align:center">
+    <p class="s-tag fade">Redes sociales</p>
+    <h2 class="s-title fade" style="font-size:clamp(1.8rem,4vw,2.8rem)">Síguenos y vive<br/><em>SenseBene</em> cada día</h2>
+  </div>
+  <div class="sicons fade">
+    <div class="sicon" title="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></div>
+    <div class="sicon" title="Facebook"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></div>
+    <div class="sicon" title="TikTok"><svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></div>
+    <div class="sicon" title="WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.562 4.14 1.535 5.876L.057 23.882a.5.5 0 0 0 .604.63l6.211-1.63A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.857a9.832 9.832 0 0 1-5.032-1.376l-.36-.214-3.732.979.998-3.642-.236-.374A9.808 9.808 0 0 1 2.143 12C2.143 6.544 6.544 2.143 12 2.143S21.857 6.544 21.857 12 17.456 21.857 12 21.857z"/></svg></div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final">
+  <h2 class="fade">Tu bienestar<br/><em>te espera</em></h2>
+  <p class="fade">Agenda hoy y descubre por qué SenseBene es el wellness favorito de San Pedro Sula.</p>
+  <a class="final-btn" href="https://wa.me/50496380089?text=Hola%2C%20quiero%20reservar%20una%20cita%20en%20SenseBene" target="_blank">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.562 4.14 1.535 5.876L.057 23.882a.5.5 0 0 0 .604.63l6.211-1.63A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.857a9.832 9.832 0 0 1-5.032-1.376l-.36-.214-3.732.979.998-3.642-.236-.374A9.808 9.808 0 0 1 2.143 12C2.143 6.544 6.544 2.143 12 2.143S21.857 6.544 21.857 12 17.456 21.857 12 21.857z"/></svg>
+    Reservar por WhatsApp
+  </a>
+</section>
+
+<footer>
+  <div class="footer-logo">SenseBene</div>
+  <p>San Pedro Sula, Honduras · Col. Los Alpes & Col. Jardines del Valle</p>
+  <p>© 2025 SenseBene Wellness · Todos los derechos reservados</p>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
+    ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px';
+  });
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+  });
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i * 100); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade, .fade-l, .fade-r').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
